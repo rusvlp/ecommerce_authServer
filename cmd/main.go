@@ -2,14 +2,14 @@ package main
 
 import (
 	"ca_kobercams/config"
-	"encoding/json"
+	"ca_kobercams/internal/app"
 	"fmt"
 )
 
 /*
  TODO:
 	1. Посмотреть, как сюда подключается GORM + MySQL
-	2. Подробнее разузнать, как работать в контроллерах (посмотреть на структуру HTTP респонзов и реквестов, а также узнать как это все реализовано в GO
+	2. Подробнее разузнать, как работать в контроллерах (посмотреть на структуру HTTP респонзов и реквестов, а также узнать как это все реализовано в GO) [V]
 	3. Посмотреть, как работают JWT Access и Refresh токены
 	4. Спросить у Димы по поводу слоя репозиториев и их месте в чистой архитектуре
 */
@@ -22,10 +22,14 @@ func main() {
 	}
 
 	fmt.Print("Server is going to start on port: " + cfg.HTTP.Port)
-	//app.Run(cfg)
-	structureTagTest()
+	if err = app.Run(cfg); err != nil {
+		fmt.Print(err)
+	}
+
+	//structureTagTest()
 }
 
+/*
 func structureTagTest() {
 	var andrey user = user{
 		Username: "andrey",
@@ -46,3 +50,5 @@ type user struct {
 	Password string `json:"-"`
 	Email    string `json:"email"`
 }
+
+*/
