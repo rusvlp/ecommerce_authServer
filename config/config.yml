@@ -1,2 +1,6 @@
 http:
   port: "8081"
+mysql:
+  url: "localhost:3306/kc_authServer"
+  username: "root"
+  password: "root"

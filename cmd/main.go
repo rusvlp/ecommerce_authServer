@@ -2,7 +2,6 @@ package main
 
 import (
 	"ca_kobercams/config"
-	"ca_kobercams/internal/app"
 	"fmt"
 )
 
@@ -21,10 +20,16 @@ func main() {
 		fmt.Print(err)
 	}
 
-	fmt.Print("Server is going to start on port: " + cfg.HTTP.Port)
-	if err = app.Run(cfg); err != nil {
-		fmt.Print(err)
-	}
+	fmt.Println(cfg)
+
+	/*
+
+		fmt.Print("Server is going to start on port: " + cfg.HTTP.Port)
+		if err = app.Run(cfg); err != nil {
+			fmt.Print(err)
+		}
+
+	*/
 
 	//structureTagTest()
 }

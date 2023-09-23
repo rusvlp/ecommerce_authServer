@@ -19,6 +19,10 @@ type (
 	}
 )
 
+func (cfg *Config) String() string {
+	return ""
+}
+
 func NewConfig() (*Config, error) {
 	cfg := Config{}
 
