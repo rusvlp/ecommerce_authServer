@@ -2,6 +2,7 @@ package main
 
 import (
 	"ca_kobercams/config"
+	"ca_kobercams/internal/app"
 	"fmt"
 )
 
@@ -14,7 +15,7 @@ import (
 */
 
 func main() {
-	cfg, err := config.NewConfig()
+	cfg, err := config.NewConfig("MYSQL_PASSWORD")
 
 	if err != nil {
 		fmt.Print(err)
@@ -22,14 +23,10 @@ func main() {
 
 	fmt.Println(cfg)
 
-	/*
-
-		fmt.Print("Server is going to start on port: " + cfg.HTTP.Port)
-		if err = app.Run(cfg); err != nil {
-			fmt.Print(err)
-		}
-
-	*/
+	fmt.Print("Server is going to start on port: " + cfg.HTTP.Port)
+	if err = app.Run(cfg); err != nil {
+		fmt.Print(err)
+	}
 
 	//structureTagTest()
 }

@@ -1,23 +1,21 @@
 package mysql
 
-import "database/sql"
+import (
+	s "ca_kobercams/internal/storage"
+	"database/sql"
 
-type repositories struct {
-	UserRepository *UserRepository
-}
+	_ "github.com/go-sql-driver/mysql"
+)
 
-func InitRepositories(database *sql.DB) (error, *repositories) {
+func InitMysqlRepositories(db *sql.DB) (error, *s.Repositories) {
 
 	userRepo := &UserRepository{
-		database,
+		Database: db,
 	}
 
-	repos := &repositories{
+	repos := &s.Repositories{
 		UserRepository: userRepo,
 	}
 
 	return nil, repos
-}
-
-type Mysql struct {
 }

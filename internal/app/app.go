@@ -4,9 +4,9 @@ import (
 	"ca_kobercams/config"
 	v1 "ca_kobercams/internal/controller/http/v1"
 	user2 "ca_kobercams/internal/controller/user"
-	"ca_kobercams/internal/entity"
-	"ca_kobercams/internal/storage/mock"
+	mysql3 "ca_kobercams/internal/storage/mysql"
 	"ca_kobercams/internal/usecase/user"
+	mysql2 "ca_kobercams/pkg/mysql"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -35,14 +35,21 @@ func setUpDependencies(cfg *config.Config) (error, *http.Server) {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	//Set Up Storages
-	userRepository := &mock.MockUserRepository{
-		Users: make([]entity.User, 0),
+	err, mysql := mysql2.InitMysql(cfg.Database)
+
+	if err != nil {
+		return err, nil
+	}
+
+	err, repos := mysql3.InitMysqlRepositories(mysql.Database)
+
+	if err != nil {
+		return err, nil
 	}
 
 	//Set Up Usecases
 	userUseCase := &user.User{
-		Repo: userRepository,
+		Repo: repos.UserRepository,
 	}
 
 	userController := user2.UserController{
