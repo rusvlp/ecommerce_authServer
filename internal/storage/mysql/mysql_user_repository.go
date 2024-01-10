@@ -13,13 +13,15 @@ type UserRepository struct {
 
 func (repository *UserRepository) Store(user *entity.User) error {
 
-	//username := user.Username
-	//password := user.Password
-	//email := user.Email
+	var username string = user.Username
+	var password string = user.Password
+	var email string = user.Email
 
-	sqlQuery, _, err := sq.Insert("users").
+	print("trying to insert user with creds: ", user.Email, ", ", user.Password, ", ", user.Email)
+
+	sqlQuery, args, err := sq.Insert("users").
 		Columns("username", "password", "email").
-		Values("aasd", "asd", "asd").
+		Values(username, password, email).
 		ToSql()
 	fmt.Println(sqlQuery)
 
@@ -27,13 +29,21 @@ func (repository *UserRepository) Store(user *entity.User) error {
 		return err
 	}
 
-	_, err = repository.Database.Exec(sqlQuery)
+	_, err = repository.Database.Exec(sqlQuery, args...)
 
 	if err != nil {
+		print(err.Error())
 		return err
 	}
 	return nil
 
+}
+
+func FindUserByUsername(username string) (error, *entity.User) {
+	return nil, nil
+}
+func FindUserByEmail(email string) (error, *entity.User) {
+	return nil, nil
 }
 
 func (repository *UserRepository) FindAll() (error, []entity.User) {
