@@ -7,11 +7,27 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-type UserRepository struct {
-	Database *sql.DB
+type userRepository struct {
+	database    *sql.DB
+	stmtCache   *sq.StmtCache
+	stmtBuilder *sq.StatementBuilderType
 }
 
-func (repository *UserRepository) Store(user *entity.User) error {
+func NewUserRepository(db *sql.DB) (error, *userRepository) {
+
+	stmtCache := sq.NewStmtCache(db)
+	stmtBuilder := sq.StatementBuilder.RunWith(stmtCache)
+
+	userRepo := &userRepository{
+		database:    db,
+		stmtCache:   stmtCache,
+		stmtBuilder: &stmtBuilder,
+	}
+
+	return nil, userRepo
+}
+
+func (repository *userRepository) Store(user *entity.User) error {
 
 	var username string = user.Username
 	var password string = user.Password
@@ -29,7 +45,7 @@ func (repository *UserRepository) Store(user *entity.User) error {
 		return err
 	}
 
-	_, err = repository.Database.Exec(sqlQuery, args...)
+	_, err = repository.database.Exec(sqlQuery, args...)
 
 	if err != nil {
 		print(err.Error())
@@ -39,14 +55,18 @@ func (repository *UserRepository) Store(user *entity.User) error {
 
 }
 
-func FindUserByUsername(username string) (error, *entity.User) {
+func (repository *userRepository) FindUserByUsername(username string) (error, *entity.User) {
+	//dbCache := sq.NewStmtCache(repository.database)
+
+	user := repository.stmtBuilder.Select("*").From("users").Where("username")
+
 	return nil, nil
 }
-func FindUserByEmail(email string) (error, *entity.User) {
+func (repository *userRepository) FindUserByEmail(email string) (error, *entity.User) {
 	return nil, nil
 }
 
-func (repository *UserRepository) FindAll() (error, []entity.User) {
+func (repository *userRepository) FindAll() (error, []entity.User) {
 	return nil, nil
 }
 

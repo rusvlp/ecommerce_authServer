@@ -9,8 +9,10 @@ import (
 
 func InitMysqlRepositories(db *sql.DB) (error, *s.Repositories) {
 
-	userRepo := &UserRepository{
-		Database: db,
+	err, userRepo := NewUserRepository(db)
+
+	if err != nil {
+		return err, nil
 	}
 
 	repos := &s.Repositories{
